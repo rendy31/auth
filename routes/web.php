@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,4 +24,18 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes(['register'=>false]);
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+// Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+
+
+
+// Routes for admin
+Route::prefix('admin')->middleware(['auth', 'role'])->group(function () {
+    Route::get('/', [DashboardController::class,'index'])->name('admin.index');
+    Route::resource('users', UserController::class);
+});
+
+
+// Routes for user
+Route::middleware(['auth', 'role'])->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('user.home');
+});

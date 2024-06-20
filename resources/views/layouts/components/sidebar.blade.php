@@ -20,36 +20,35 @@
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
-                <li class="nav-item active">
-                    <a data-bs-toggle="collapse" href="#" class="collapsed" aria-expanded="false">
+                @auth
+                <li class="nav-item {{ (request()->is('admin')) || (request()->is('/')) ? 'active' : '' }}">
+                    <a data-bs-toggle="collapse" href="{{route('admin.index')}}" class="collapsed" aria-expanded="false">
                         <i class="fas fa-home"></i>
                         <p>Dashboard</p>
                     </a>
-                    {{-- <div class="collapse" id="dashboard">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="../index.html">
-                                    <span class="sub-item">Dashboard 1</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div> --}}
+
                 </li>
+                @if(Auth::user()->isAdmin())
                 <li class="nav-section">
                     <span class="sidebar-mini-icon">
                         <i class="fa fa-ellipsis-h"></i>
                     </span>
-                    <h4 class="text-section">Components</h4>
+                    <h4 class="text-section">Admin</h4>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item {{ (request()->is('admin/users*')) ? 'active' : '' }}">
                     <a data-bs-toggle="collapse" href="#submenu">
                         <i class="fas fa-bars"></i>
-                        <p>Menu Levels</p>
+                        <p>Konfigurasi</p>
                         <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="submenu">
+                    <div class="collapse {{ (request()->is('admin/users*')) ? 'show' : '' }}" id="submenu">
                         <ul class="nav nav-collapse">
+                            <li class="{{ (request()->is('admin/users*')) ? 'active' : '' }}">
+                                <a href="{{route('users.index')}}">
+                                    <span class="sub-item">Users</span>
+                                </a>
+                            </li>
                             <li>
                                 <a data-bs-toggle="collapse" href="#subnav1">
                                     <span class="sub-item">Level 1</span>
@@ -85,14 +84,12 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li>
-                                <a href="#">
-                                    <span class="sub-item">Level 1</span>
-                                </a>
-                            </li>
+                            
                         </ul>
                     </div>
                 </li>
+                @endif
+                @endauth
             </ul>
         </div>
     </div>
